@@ -2,7 +2,6 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
@@ -26,11 +25,10 @@
       --text:#fff;
       --muted:#aaa;
       --blue:#0a84ff;
+      --overlay:rgba(0,0,0,0.62);
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{ box-sizing:border-box; }
 
     html, body{
       margin:0;
@@ -98,6 +96,22 @@
       margin-bottom:10px;
     }
 
+    .clickable-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      cursor:pointer;
+      user-select:none;
+    }
+
+    .clickable-title .hint{
+      font-size:11px;
+      color:#8e8e93;
+      font-weight:500;
+      white-space:nowrap;
+    }
+
     .circle-wrap{
       width:100%;
       display:flex;
@@ -132,9 +146,7 @@
       stroke-width:10;
     }
 
-    .bg{
-      stroke:#1c1c1e;
-    }
+    .bg{ stroke:#1c1c1e; }
 
     .progress{
       stroke:var(--blue);
@@ -183,17 +195,9 @@
       font-weight:600;
     }
 
-    button:active{
-      transform:scale(0.97);
-    }
-
-    button.active{
-      background:var(--blue);
-    }
-
-    button.secondary{
-      background:#2b2b2f;
-    }
+    button:active{ transform:scale(0.97); }
+    button.active{ background:var(--blue); }
+    button.secondary{ background:#2b2b2f; }
 
     input{
       width:100%;
@@ -240,9 +244,7 @@
       word-break:break-word;
     }
 
-    .subject-name.selected{
-      color:var(--blue);
-    }
+    .subject-name.selected{ color:var(--blue); }
 
     .subject-badge{
       flex-shrink:0;
@@ -272,9 +274,7 @@
       margin-top:10px;
     }
 
-    .add-row input{
-      flex:1;
-    }
+    .add-row input{ flex:1; }
 
     .add-row button{
       flex:0 0 auto;
@@ -288,8 +288,381 @@
       padding:8px 0;
     }
 
-    .footer-space{
-      height:8px;
+    .footer-space{ height:8px; }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0);
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      z-index:9999;
+      padding:
+        max(12px, env(safe-area-inset-top))
+        max(12px, env(safe-area-inset-right))
+        max(12px, env(safe-area-inset-bottom))
+        max(12px, env(safe-area-inset-left));
+      transition:background 0.22s ease;
+    }
+
+    .modal.show{
+      display:flex;
+      background:var(--overlay);
+    }
+
+    .modal-sheet{
+      width:100%;
+      max-width:430px;
+      max-height:min(84vh, 780px);
+      background:#121214;
+      border:1px solid #2a2a2d;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 10px 40px rgba(0,0,0,0.45);
+      display:flex;
+      flex-direction:column;
+      transform:translateY(26px);
+      opacity:0;
+      transition:transform 0.24s ease, opacity 0.24s ease;
+    }
+
+    .modal.show .modal-sheet{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      padding:14px 14px 10px;
+      border-bottom:1px solid #252528;
+    }
+
+    .modal-title-wrap{ min-width:0; }
+
+    .modal-title{
+      font-size:16px;
+      font-weight:800;
+    }
+
+    .modal-sub{
+      margin-top:4px;
+      font-size:12px;
+      color:#9b9ba1;
+    }
+
+    .icon-btn{
+      flex:0 0 auto;
+      min-width:auto;
+      padding:8px 12px;
+      border-radius:12px;
+      background:#242428;
+      font-size:13px;
+    }
+
+    .modal-body{
+      overflow:auto;
+      -webkit-overflow-scrolling:touch;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .day-card{
+      background:#0d0d0f;
+      border:1px solid #26262a;
+      border-radius:16px;
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .day-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      padding-bottom:8px;
+      border-bottom:1px solid #232327;
+    }
+
+    .day-title-wrap{
+      min-width:0;
+    }
+
+    .day-title{
+      font-size:16px;
+      font-weight:800;
+      line-height:1.2;
+    }
+
+    .day-subtitle{
+      margin-top:4px;
+      font-size:12px;
+      color:#9f9fa6;
+    }
+
+    .day-badge{
+      flex:0 0 auto;
+      background:#17171a;
+      border:1px solid #2b2b30;
+      color:#d7d7dd;
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:11px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:8px;
+    }
+
+    .summary-item{
+      background:#151518;
+      border:1px solid #2b2b30;
+      border-radius:12px;
+      padding:10px;
+    }
+
+    .summary-label{
+      font-size:11px;
+      color:#999;
+      margin-bottom:4px;
+    }
+
+    .summary-value{
+      font-size:15px;
+      font-weight:800;
+      word-break:break-word;
+    }
+
+    .block-title{
+      font-size:13px;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    .chart-wrap{
+      display:grid;
+      grid-template-columns:120px 1fr;
+      gap:12px;
+      align-items:center;
+      background:#151518;
+      border:1px solid #2b2b30;
+      border-radius:14px;
+      padding:12px;
+    }
+
+    .donut-card{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .donut{
+      width:108px;
+      height:108px;
+      border-radius:50%;
+      position:relative;
+      flex:0 0 auto;
+      background:#222;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    .donut::after{
+      content:"";
+      position:absolute;
+      inset:18px;
+      border-radius:50%;
+      background:#0d0d0f;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .donut-center{
+      position:absolute;
+      inset:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      z-index:2;
+      text-align:center;
+      padding:0 10px;
+    }
+
+    .donut-center-label{
+      font-size:10px;
+      color:#9f9fa6;
+      margin-bottom:2px;
+    }
+
+    .donut-center-value{
+      font-size:13px;
+      font-weight:800;
+      line-height:1.2;
+    }
+
+    .mini-legend{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      min-width:0;
+    }
+
+    .mini-legend-item{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+    }
+
+    .mini-legend-dot,
+    .legend-dot{
+      width:12px;
+      height:12px;
+      border-radius:999px;
+      flex:0 0 auto;
+    }
+
+    .mini-legend-text{
+      min-width:0;
+      flex:1;
+    }
+
+    .mini-legend-main{
+      font-size:13px;
+      font-weight:700;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .mini-legend-sub{
+      margin-top:2px;
+      font-size:11px;
+      color:#a0a0a6;
+    }
+
+    .timeline-box{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .timeline-scale{
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      color:#999;
+      margin-bottom:2px;
+    }
+
+    .timeline-track{
+      position:relative;
+      width:100%;
+      height:48px;
+      border-radius:12px;
+      background:linear-gradient(to right, #17171a, #101012);
+      border:1px solid #2b2b30;
+      overflow:hidden;
+    }
+
+    .timeline-hour-line{
+      position:absolute;
+      top:0;
+      bottom:0;
+      width:1px;
+      background:rgba(255,255,255,0.07);
+    }
+
+    .timeline-block{
+      position:absolute;
+      top:7px;
+      height:32px;
+      border-radius:10px;
+      opacity:0.96;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0 8px;
+      min-width:4px;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,0.08);
+    }
+
+    .timeline-block-label{
+      font-size:11px;
+      font-weight:700;
+      color:white;
+      text-shadow:0 1px 1px rgba(0,0,0,0.25);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:100%;
+    }
+
+    .legend-list,
+    .log-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .legend-item,
+    .log-item{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:#151518;
+      border:1px solid #2b2b30;
+      border-radius:12px;
+      padding:10px;
+    }
+
+    .legend-main,
+    .log-main{
+      min-width:0;
+      flex:1;
+    }
+
+    .legend-subject,
+    .log-subject{
+      font-size:14px;
+      font-weight:700;
+      word-break:break-word;
+    }
+
+    .legend-time,
+    .log-time{
+      margin-top:3px;
+      font-size:12px;
+      color:#a0a0a6;
+    }
+
+    .log-duration{
+      flex:0 0 auto;
+      font-size:12px;
+      color:#d8d8dd;
+      font-weight:700;
+      text-align:right;
+    }
+
+    .day-empty{
+      background:#151518;
+      border:1px solid #2b2b30;
+      border-radius:12px;
+      padding:14px;
+      color:#a7a7ae;
+      text-align:center;
+      font-size:13px;
     }
 
     @media (max-width:360px){
@@ -300,6 +673,27 @@
 
       .add-row{
         flex-direction:column;
+      }
+
+      .summary-grid{
+        grid-template-columns:1fr;
+      }
+
+      .chart-wrap{
+        grid-template-columns:1fr;
+      }
+
+      .donut-card{
+        justify-content:flex-start;
+      }
+
+      .timeline-track{
+        height:50px;
+      }
+
+      .timeline-block{
+        height:34px;
+        top:7px;
       }
     }
   </style>
@@ -351,7 +745,16 @@
     </div>
 
     <div class="section">
-      <div class="section-title">📊 공부시간</div>
+      <div
+        class="section-title clickable-title"
+        onclick="toggleStudyTimeline()"
+        role="button"
+        aria-label="공부 그래프 보기"
+      >
+        <span>📊 공부시간</span>
+        <span class="hint">눌러서 그래프 열기/닫기</span>
+      </div>
+
       <div id="stats" class="stats-list"></div>
 
       <div class="controls-stack" style="margin-top:10px;">
@@ -360,6 +763,20 @@
     </div>
 
     <div class="footer-space"></div>
+  </div>
+
+  <div id="timelineModal" class="modal" onclick="closeTimelineIfBackdrop(event)">
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="timelineTitle">
+      <div class="modal-head">
+        <div class="modal-title-wrap">
+          <div id="timelineTitle" class="modal-title">공부 그래프</div>
+          <div id="timelineSub" class="modal-sub">날짜별 공부 기록</div>
+        </div>
+        <button class="icon-btn" onclick="closeStudyTimeline()">닫기</button>
+      </div>
+
+      <div id="timelineDaysContainer" class="modal-body"></div>
+    </div>
   </div>
 
   <script>
@@ -372,6 +789,9 @@
 
     const RADIUS = 92;
     const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+    const STUDY_LOGS_KEY = "studyLogs";
+    const ACTIVE_LOG_KEY = "activeStudyLog";
+    const WEEKDAYS = ["일", "월", "화", "수", "목", "금", "토"];
 
     let mode = "focus";
     let remainingTime = FOCUS_TIME;
@@ -384,8 +804,9 @@
     let subjects = JSON.parse(localStorage.getItem("subjects")) || [];
     let rawStats = JSON.parse(localStorage.getItem("stats")) || {};
     let stats = normalizeStats(rawStats);
-
     let timerState = JSON.parse(localStorage.getItem("timerState")) || null;
+    let studyLogs = JSON.parse(localStorage.getItem(STUDY_LOGS_KEY)) || [];
+    let activeStudyLog = JSON.parse(localStorage.getItem(ACTIVE_LOG_KEY)) || null;
 
     const progress = document.getElementById("progress");
     const toggleBtn = document.getElementById("toggleBtn");
@@ -397,6 +818,9 @@
     const currentSubjectLabelEl = document.getElementById("currentSubjectLabel");
     const newSubjectInput = document.getElementById("newSubject");
 
+    const timelineModalEl = document.getElementById("timelineModal");
+    const timelineDaysContainerEl = document.getElementById("timelineDaysContainer");
+
     progress.setAttribute("stroke-dasharray", CIRCUMFERENCE);
     progress.setAttribute("stroke-dashoffset", "0");
 
@@ -407,6 +831,18 @@
         out[key] = Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
       }
       return out;
+    }
+
+    function saveStudyLogs(){
+      localStorage.setItem(STUDY_LOGS_KEY, JSON.stringify(studyLogs));
+    }
+
+    function saveActiveStudyLog(){
+      if (activeStudyLog) {
+        localStorage.setItem(ACTIVE_LOG_KEY, JSON.stringify(activeStudyLog));
+      } else {
+        localStorage.removeItem(ACTIVE_LOG_KEY);
+      }
     }
 
     function requestNoticePermissionOnce(){
@@ -447,6 +883,31 @@
       if (h > 0) return `${h}시간 ${m}분 ${s}초`;
       if (m > 0) return `${m}분 ${s}초`;
       return `${s}초`;
+    }
+
+    function formatClock(dateLike){
+      const d = dateLike instanceof Date ? dateLike : new Date(dateLike);
+      const hh = String(d.getHours()).padStart(2, "0");
+      const mm = String(d.getMinutes()).padStart(2, "0");
+      return `${hh}:${mm}`;
+    }
+
+    function formatDateWithWeekday(dateLike){
+      const d = dateLike instanceof Date ? dateLike : new Date(dateLike);
+      return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 (${WEEKDAYS[d.getDay()]})`;
+    }
+
+    function getDateKeyFromMs(ms){
+      const d = new Date(ms);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function parseDateKey(dateKey){
+      const [y, m, d] = dateKey.split("-").map(Number);
+      return new Date(y, m - 1, d);
     }
 
     function getDurationByMode(){
@@ -517,6 +978,43 @@
     function saveAll(){
       saveCore();
       saveTimerState();
+      saveStudyLogs();
+      saveActiveStudyLog();
+    }
+
+    function getTimeLeftFromTarget(){
+      if (!targetEndTime) return remainingTime;
+      return Math.max(0, Math.ceil((targetEndTime - Date.now()) / 1000));
+    }
+
+    function startStudyLogIfNeeded(){
+      if (!(mode === "focus" && current && interval)) return;
+      if (activeStudyLog && activeStudyLog.subject === current) return;
+
+      if (activeStudyLog) closeStudyLog();
+
+      activeStudyLog = {
+        subject: current,
+        start: Date.now()
+      };
+      saveActiveStudyLog();
+    }
+
+    function closeStudyLog(endTime = Date.now()){
+      if (!activeStudyLog) return;
+
+      const end = Math.max(endTime, activeStudyLog.start);
+      if (end - activeStudyLog.start >= 1000) {
+        studyLogs.push({
+          subject: activeStudyLog.subject,
+          start: activeStudyLog.start,
+          end
+        });
+        saveStudyLogs();
+      }
+
+      activeStudyLog = null;
+      saveActiveStudyLog();
     }
 
     function syncStudyTime(){
@@ -524,7 +1022,6 @@
 
       const now = Date.now();
       const diffMs = now - lastStudySyncAt;
-
       if (diffMs < 1000) return;
 
       const addSeconds = Math.floor(diffMs / 1000);
@@ -539,8 +1036,7 @@
 
     function calculateTimeLeft(){
       if (!(interval && targetEndTime)) return remainingTime;
-      const diff = targetEndTime - Date.now();
-      return Math.max(0, Math.ceil(diff / 1000));
+      return getTimeLeftFromTarget();
     }
 
     function update(){
@@ -551,6 +1047,10 @@
 
       renderTime(timeLeft);
       renderStats();
+
+      if (timelineModalEl.classList.contains("show")) {
+        renderStudyTimeline();
+      }
 
       if (interval && targetEndTime && Date.now() >= targetEndTime) {
         handleComplete();
@@ -577,6 +1077,7 @@
 
       updateButton();
       renderStatus();
+      startStudyLogIfNeeded();
       update();
       saveTimerState();
     }
@@ -585,13 +1086,15 @@
       if (!interval) return;
 
       syncStudyTime();
+      const timeLeft = getTimeLeftFromTarget();
 
       clearInterval(interval);
       interval = null;
 
-      remainingTime = calculateTimeLeft();
+      remainingTime = timeLeft;
       targetEndTime = null;
       lastStudySyncAt = null;
+      closeStudyLog();
 
       renderTime(remainingTime);
       updateButton();
@@ -600,11 +1103,8 @@
     }
 
     function toggleTimer(){
-      if (interval) {
-        pause();
-      } else {
-        start();
-      }
+      if (interval) pause();
+      else start();
     }
 
     function resetTimer(){
@@ -618,6 +1118,7 @@
       targetEndTime = null;
       lastStudySyncAt = null;
       sessions = 0;
+      closeStudyLog();
 
       renderTime(remainingTime);
       updateButton();
@@ -633,6 +1134,7 @@
       interval = null;
       targetEndTime = null;
       lastStudySyncAt = null;
+      closeStudyLog();
 
       if (mode === "focus") {
         sessions++;
@@ -681,6 +1183,7 @@
       interval = null;
       targetEndTime = null;
       lastStudySyncAt = null;
+      closeStudyLog();
 
       if (mode === "focus") {
         sessions++;
@@ -754,7 +1257,16 @@
     }
 
     function selectSubject(subject){
-      current = subject;
+      if (interval && mode === "focus" && current !== subject) {
+        syncStudyTime();
+        closeStudyLog();
+        current = subject;
+        lastStudySyncAt = Date.now();
+        startStudyLogIfNeeded();
+      } else {
+        current = subject;
+      }
+
       renderSubjects();
       renderCurrentSubject();
       saveTimerState();
@@ -769,7 +1281,16 @@
         if (typeof stats[value] !== "number") stats[value] = 0;
       }
 
-      current = value;
+      if (interval && mode === "focus" && current !== value) {
+        syncStudyTime();
+        closeStudyLog();
+        current = value;
+        lastStudySyncAt = Date.now();
+        startStudyLogIfNeeded();
+      } else {
+        current = value;
+      }
+
       newSubjectInput.value = "";
 
       saveAll();
@@ -792,6 +1313,10 @@
       renderSubjects();
       renderStats();
       renderCurrentSubject();
+
+      if (timelineModalEl.classList.contains("show")) {
+        renderStudyTimeline();
+      }
     }
 
     function editSubject(subject){
@@ -812,12 +1337,29 @@
       delete stats[subject];
       stats[nextName] = oldValue;
 
+      studyLogs = studyLogs.map((log) => {
+        if (log.subject === subject) {
+          return { ...log, subject: nextName };
+        }
+        return log;
+      });
+      saveStudyLogs();
+
+      if (activeStudyLog && activeStudyLog.subject === subject) {
+        activeStudyLog.subject = nextName;
+        saveActiveStudyLog();
+      }
+
       if (current === subject) current = nextName;
 
       saveAll();
       renderSubjects();
       renderStats();
       renderCurrentSubject();
+
+      if (timelineModalEl.classList.contains("show")) {
+        renderStudyTimeline();
+      }
     }
 
     function resetSubjects(){
@@ -828,11 +1370,17 @@
       subjects = [];
       stats = {};
       current = null;
+      studyLogs = [];
+      activeStudyLog = null;
 
       saveAll();
       renderSubjects();
       renderStats();
       renderCurrentSubject();
+
+      if (timelineModalEl.classList.contains("show")) {
+        renderStudyTimeline();
+      }
     }
 
     function resetStats(){
@@ -844,10 +1392,23 @@
       subjects.forEach((subject) => {
         newStats[subject] = 0;
       });
+
       stats = newStats;
+      studyLogs = [];
+      activeStudyLog = interval && mode === "focus" && current
+        ? { subject: current, start: Date.now() }
+        : null;
+
+      if (interval && mode === "focus") {
+        lastStudySyncAt = Date.now();
+      }
 
       saveAll();
       renderStats();
+
+      if (timelineModalEl.classList.contains("show")) {
+        renderStudyTimeline();
+      }
     }
 
     function restoreTimerState(){
@@ -880,10 +1441,24 @@
           }
         }
 
+        if (mode === "focus" && activeStudyLog && current && activeStudyLog.subject !== current) {
+          closeStudyLog(now);
+        }
+
+        if (mode === "focus" && current && !activeStudyLog) {
+          activeStudyLog = {
+            subject: current,
+            start: lastStudySyncAt || now
+          };
+          saveActiveStudyLog();
+        }
+
         const left = Math.max(0, Math.ceil((targetEndTime - now) / 1000));
         remainingTime = left;
 
         if (left <= 0) {
+          closeStudyLog(now);
+
           if (mode === "focus") {
             sessions++;
 
@@ -915,8 +1490,352 @@
       renderTime(remainingTime);
     }
 
+    function getExpandedLogsByDay(){
+      const combinedLogs = [...studyLogs];
+
+      if (activeStudyLog) {
+        combinedLogs.push({
+          subject: activeStudyLog.subject,
+          start: activeStudyLog.start,
+          end: Date.now(),
+          active: true
+        });
+      }
+
+      const grouped = {};
+
+      combinedLogs.forEach((log) => {
+        let cursor = log.start;
+        const finalEnd = Math.max(log.end, log.start);
+
+        while (cursor < finalEnd) {
+          const currentDate = new Date(cursor);
+          const dayStart = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate(),
+            0, 0, 0, 0
+          ).getTime();
+          const nextDayStart = dayStart + 86400000;
+          const segmentEnd = Math.min(finalEnd, nextDayStart);
+          const key = getDateKeyFromMs(cursor);
+
+          if (!grouped[key]) grouped[key] = [];
+
+          if (segmentEnd > cursor) {
+            grouped[key].push({
+              subject: log.subject,
+              start: cursor,
+              end: segmentEnd,
+              active: !!log.active && segmentEnd === finalEnd
+            });
+          }
+
+          cursor = segmentEnd;
+        }
+      });
+
+      Object.keys(grouped).forEach((key) => {
+        grouped[key].sort((a, b) => a.start - b.start);
+      });
+
+      return grouped;
+    }
+
+    function subjectColor(subject){
+      const colors = [
+        "#0a84ff", "#30d158", "#ff9f0a", "#ff375f", "#bf5af2",
+        "#64d2ff", "#ffd60a", "#40c8a8", "#ac8cff", "#ff6b6b"
+      ];
+      let hash = 0;
+      for (let i = 0; i < subject.length; i++) {
+        hash = (hash * 31 + subject.charCodeAt(i)) >>> 0;
+      }
+      return colors[hash % colors.length];
+    }
+
+    function buildDonutGradient(subjectEntries){
+      if (!subjectEntries.length) return "#2a2a2d";
+
+      const total = subjectEntries.reduce((sum, [, seconds]) => sum + seconds, 0);
+      if (total <= 0) return "#2a2a2d";
+
+      let acc = 0;
+      const parts = [];
+
+      subjectEntries.forEach(([subject, seconds]) => {
+        const start = (acc / total) * 360;
+        acc += seconds;
+        const end = (acc / total) * 360;
+        parts.push(`${subjectColor(subject)} ${start}deg ${end}deg`);
+      });
+
+      return `conic-gradient(${parts.join(", ")})`;
+    }
+
+    function renderTimelineHourLines(trackEl, startHour, endHour){
+      const hours = Math.max(1, endHour - startHour);
+      for (let i = 0; i <= hours; i++) {
+        const line = document.createElement("div");
+        line.className = "timeline-hour-line";
+        line.style.left = `${(i / hours) * 100}%`;
+        trackEl.appendChild(line);
+      }
+    }
+
+    function createSummaryGrid(totalSeconds, firstStart, lastEnd, subjectCount){
+      return `
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-label">총 공부시간</div>
+            <div class="summary-value">${escapeHtml(formatStudy(totalSeconds))}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">과목 수</div>
+            <div class="summary-value">${subjectCount}개</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">첫 시작</div>
+            <div class="summary-value">${formatClock(firstStart)}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-label">마지막 기록</div>
+            <div class="summary-value">${formatClock(lastEnd)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildChartSection(subjectEntries, totalSeconds){
+      const chartWrap = document.createElement("div");
+      chartWrap.innerHTML = `
+        <div class="block-title">과목 비중</div>
+        <div class="chart-wrap">
+          <div class="donut-card">
+            <div class="donut">
+              <div class="donut-center">
+                <div class="donut-center-label">총 공부시간</div>
+                <div class="donut-center-value">${escapeHtml(formatStudy(totalSeconds))}</div>
+              </div>
+            </div>
+          </div>
+          <div class="mini-legend"></div>
+        </div>
+      `;
+
+      const donutEl = chartWrap.querySelector(".donut");
+      const legendEl = chartWrap.querySelector(".mini-legend");
+      donutEl.style.background = buildDonutGradient(subjectEntries);
+
+      subjectEntries.forEach(([subject, seconds]) => {
+        const percent = totalSeconds > 0 ? Math.round((seconds / totalSeconds) * 100) : 0;
+        const item = document.createElement("div");
+        item.className = "mini-legend-item";
+        item.innerHTML = `
+          <div class="mini-legend-dot" style="background:${subjectColor(subject)};"></div>
+          <div class="mini-legend-text">
+            <div class="mini-legend-main">${escapeHtml(subject)}</div>
+            <div class="mini-legend-sub">${escapeHtml(formatStudy(seconds))} · ${percent}%</div>
+          </div>
+        `;
+        legendEl.appendChild(item);
+      });
+
+      return chartWrap;
+    }
+
+    function buildDayCard(dateKey, logs){
+      const dayDate = parseDateKey(dateKey);
+      const totalSeconds = logs.reduce((sum, log) => {
+        return sum + Math.max(0, Math.floor((log.end - log.start) / 1000));
+      }, 0);
+
+      const firstStart = logs[0].start;
+      const lastEnd = logs[logs.length - 1].end;
+
+      const subjectTotals = {};
+      logs.forEach((log) => {
+        const sec = Math.max(0, Math.floor((log.end - log.start) / 1000));
+        if (!subjectTotals[log.subject]) subjectTotals[log.subject] = 0;
+        subjectTotals[log.subject] += sec;
+      });
+
+      const subjectEntries = Object.entries(subjectTotals).sort((a, b) => b[1] - a[1]);
+
+      const minHour = Math.floor(new Date(firstStart).getHours());
+      const lastDate = new Date(lastEnd);
+      const maxHour = Math.max(
+        minHour + 1,
+        Math.ceil(lastDate.getHours() + (lastDate.getMinutes() / 60) + (lastDate.getSeconds() / 3600))
+      );
+      const startHour = Math.max(0, minHour);
+      const endHour = Math.min(24, maxHour);
+
+      const totalRangeMinutes = Math.max(60, (endHour - startHour) * 60);
+
+      const dayCard = document.createElement("div");
+      dayCard.className = "day-card";
+
+      const isToday = getDateKeyFromMs(Date.now()) === dateKey;
+
+      dayCard.innerHTML = `
+        <div class="day-head">
+          <div class="day-title-wrap">
+            <div class="day-title">${formatDateWithWeekday(dayDate)}</div>
+            <div class="day-subtitle">${formatClock(firstStart)} ~ ${formatClock(lastEnd)} 기록</div>
+          </div>
+          <div class="day-badge">${isToday ? "오늘" : "기록"}</div>
+        </div>
+
+        ${createSummaryGrid(totalSeconds, firstStart, lastEnd, subjectEntries.length)}
+      `;
+
+      dayCard.appendChild(buildChartSection(subjectEntries, totalSeconds));
+
+      const timelineSection = document.createElement("div");
+      timelineSection.innerHTML = `
+        <div class="block-title">타임라인</div>
+        <div class="timeline-box">
+          <div class="timeline-scale">
+            <span>${String(startHour).padStart(2, "0")}:00</span>
+            <span>${String(Math.floor((startHour + endHour) / 2)).padStart(2, "0")}:00</span>
+            <span>${String(endHour).padStart(2, "0")}:00</span>
+          </div>
+          <div class="timeline-track"></div>
+        </div>
+      `;
+      dayCard.appendChild(timelineSection);
+
+      const legendSection = document.createElement("div");
+      legendSection.innerHTML = `
+        <div class="block-title">과목별 총 공부시간</div>
+        <div class="legend-list"></div>
+      `;
+      dayCard.appendChild(legendSection);
+
+      const logSection = document.createElement("div");
+      logSection.innerHTML = `
+        <div class="block-title">세부 기록</div>
+        <div class="log-list"></div>
+      `;
+      dayCard.appendChild(logSection);
+
+      const trackEl = dayCard.querySelector(".timeline-track");
+      const legendListEl = dayCard.querySelector(".legend-list");
+      const logListEl = dayCard.querySelector(".log-list");
+
+      renderTimelineHourLines(trackEl, startHour, endHour);
+
+      logs.forEach((log) => {
+        const startDate = new Date(log.start);
+        const endDate = new Date(log.end);
+
+        const startMinutes =
+          (startDate.getHours() * 60 + startDate.getMinutes()) - (startHour * 60);
+
+        const endMinutes =
+          (endDate.getHours() * 60 + endDate.getMinutes()) +
+          (endDate.getSeconds() / 60) -
+          (startHour * 60);
+
+        const left = (startMinutes / totalRangeMinutes) * 100;
+        const width = Math.max(1.4, ((endMinutes - startMinutes) / totalRangeMinutes) * 100);
+
+        const block = document.createElement("div");
+        block.className = "timeline-block";
+        block.style.left = `${left}%`;
+        block.style.width = `${width}%`;
+        block.style.background = subjectColor(log.subject);
+        block.title = `${log.subject} ${formatClock(log.start)}~${formatClock(log.end)}`;
+
+        const label = document.createElement("div");
+        label.className = "timeline-block-label";
+        label.innerText = log.subject;
+        block.appendChild(label);
+
+        trackEl.appendChild(block);
+      });
+
+      subjectEntries.forEach(([subject, seconds]) => {
+        const item = document.createElement("div");
+        item.className = "legend-item";
+        item.innerHTML = `
+          <div class="legend-dot" style="background:${subjectColor(subject)};"></div>
+          <div class="legend-main">
+            <div class="legend-subject">${escapeHtml(subject)}</div>
+            <div class="legend-time">${escapeHtml(formatStudy(seconds))}</div>
+          </div>
+        `;
+        legendListEl.appendChild(item);
+      });
+
+      logs.forEach((log) => {
+        const durationSec = Math.max(0, Math.floor((log.end - log.start) / 1000));
+        const item = document.createElement("div");
+        item.className = "log-item";
+        item.innerHTML = `
+          <div class="legend-dot" style="background:${subjectColor(log.subject)};"></div>
+          <div class="log-main">
+            <div class="log-subject">${escapeHtml(log.subject)}</div>
+            <div class="log-time">${formatClock(log.start)} ~ ${formatClock(log.end)}${log.active ? " · 진행중" : ""}</div>
+          </div>
+          <div class="log-duration">${escapeHtml(formatStudy(durationSec))}</div>
+        `;
+        logListEl.appendChild(item);
+      });
+
+      return dayCard;
+    }
+
+    function renderStudyTimeline(){
+      const grouped = getExpandedLogsByDay();
+      const dateKeys = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+
+      timelineDaysContainerEl.innerHTML = "";
+
+      if (dateKeys.length === 0) {
+        timelineDaysContainerEl.innerHTML = `
+          <div class="day-card">
+            <div class="day-empty">아직 기록된 공부 로그가 없어. 타이머를 시작하면 날짜별 그래프가 여기에 보여.</div>
+          </div>
+        `;
+        return;
+      }
+
+      dateKeys.forEach((dateKey) => {
+        const logs = grouped[dateKey];
+        if (!logs || logs.length === 0) return;
+        timelineDaysContainerEl.appendChild(buildDayCard(dateKey, logs));
+      });
+    }
+
+    function openStudyTimeline(){
+      renderStudyTimeline();
+      timelineModalEl.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeStudyTimeline(){
+      timelineModalEl.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    function toggleStudyTimeline(){
+      if (timelineModalEl.classList.contains("show")) {
+        closeStudyTimeline();
+      } else {
+        openStudyTimeline();
+      }
+    }
+
+    function closeTimelineIfBackdrop(event){
+      if (event.target === timelineModalEl) {
+        closeStudyTimeline();
+      }
+    }
+
     function escapeHtml(str){
-      return str
+      return String(str)
         .replaceAll("&", "&amp;")
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
@@ -925,16 +1844,18 @@
     }
 
     function escapeJs(str){
-      return str
+      return String(str)
         .replaceAll("\\", "\\\\")
         .replaceAll("'", "\\'")
         .replaceAll('"', '\\"');
     }
 
     newSubjectInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        addSubject();
-      }
+      if (e.key === "Enter") addSubject();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeStudyTimeline();
     });
 
     document.addEventListener("visibilitychange", () => {
